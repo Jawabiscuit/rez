@@ -182,6 +182,7 @@ def run(command=None):
         else:
             return func(opts, opts.parser, extra_arg_groups)
 
+    print("HELLO!!!!!")
     if opts.profile:
         import cProfile
         cProfile.runctx("run_cmd()", globals(), locals(), filename=opts.profile)

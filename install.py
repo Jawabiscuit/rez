@@ -214,7 +214,7 @@ def install_rez_from_source(dest_dir):
     _, py_executable = get_virtualenv_py_executable(dest_dir)
 
     # install via pip
-    run_command([py_executable, "-m", "pip", "install", "."])
+    run_command([py_executable, "-m", "pip", "install", "-e", "."])
 
 
 def install_as_rez_package(repo_path):
