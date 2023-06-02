@@ -95,6 +95,8 @@ def to_mixed_path(path):
             return '{}:/'.format(match.group(1).upper())
 
     # c:\ and C:\ -> C:/
+    # TODO: This is not upcasing the drive letter for env var paths,
+    # which is inconsistent with cygpath.
     drive_letter_match = _drive_start_regex.match(path)
     # If converting the drive letter to posix, capitalize the drive
     # letter as per cygpath behavior.
