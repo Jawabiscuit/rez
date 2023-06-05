@@ -557,7 +557,7 @@ class ActionInterpreter(object):
 
     # --- other
 
-    def escape_string(self, value, is_path=False, is_shell_path=False):
+    def escape_string(self, value, is_path=False):
         """Escape a string.
 
         Escape the given string so that special characters (such as quotes and
@@ -575,7 +575,6 @@ class ActionInterpreter(object):
         Args:
             value (str or `EscapedString`): String to escape.
             is_path (bool): True if the value is path-like.
-            is_shell_path (bool): True if the value is a shell-path.
 
         Returns:
             str: The escaped string.
@@ -585,16 +584,6 @@ class ActionInterpreter(object):
     @classmethod
     def _is_pathed_key(cls, key):
         return any(fnmatch(key, x) for x in config.pathed_env_vars)
-
-    @classmethod
-    def _is_shell_pathed_key(cls, key):
-        shell_name = cls.name() if hasattr(cls, 'name') else ''
-        if shell_name not in config.shell_pathed_env_vars:
-            return False
-
-        return any(
-            fnmatch(key, x) for x in config.shell_pathed_env_vars[shell_name]
-        )
 
     def normalize_path(self, path):
         """Normalize a path.
@@ -623,6 +612,9 @@ class ActionInterpreter(object):
 
         Note that `value` may be more than one pathsep-delimited paths.
         """
+        # Prevent path conversion if normalization is disabled in the config.
+        if not config.enable_path_normalization:
+            return value
         print_debug("ActionInterpreter normalize_path[s]()")
         paths = value.split(self.pathsep)
         paths = [self.normalize_path(x) for x in paths]
@@ -832,19 +824,6 @@ class Python(ActionInterpreter):
         """
         Return the given path as a system path.
         Used if the path needs to be reformatted to suit a specific case.
-        Args:
-            path (str): File path.
-
-        Returns:
-            (str): Transformed file path.
-        """
-        return path
-
-    def as_shell_path(self, path):
-        """
-        Return the given path as a shell path.
-        Used if the shell requires a different pathing structure.
-
         Args:
             path (str): File path.
 

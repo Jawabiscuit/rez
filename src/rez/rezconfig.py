@@ -534,18 +534,9 @@ pathed_env_vars = [
     "*PATH"
 ]
 
-# Some shells may require multiple types of pathing, so this option provides
-# a way to define variables on a per-shell basis to convert for shell pathing
-# instead of the pathing provided above or no modification at all.
-shell_pathed_env_vars = {
-    "gitbash": ["PYTHONPATH"]
-}
-
-# If set to True, completely disables any path transformations that would occur
-# as a result of both the shell and the settings in "pathed_env_vars" and
-# "shell_pathed_env_vars". This is meant to aid in debugging and should be
-# False unless needed.
-disable_normalization = False
+# Perform path normalization on $PATH and other path-like environment variables.
+# Applies the `pathed_env_vars` setting to all shells.
+enable_path_normalization = False
 
 # Defines what suites on $PATH stay visible when a new rez environment is resolved.
 # Possible values are:

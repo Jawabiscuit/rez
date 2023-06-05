@@ -11,6 +11,7 @@ from rez.shells import Shell
 from rez.system import system
 from rez.utils.cygpath import convert_path
 from rez.utils.execution import Popen
+from rez.utils.logging_ import print_debug
 from rez.utils.platform_ import platform_
 from rez.vendor.six import six
 from ._utils.windows import get_syspaths_from_registry
@@ -218,10 +219,8 @@ class CMD(Shell):
             script = '&& '.join(lines)
         return script
 
-    def escape_string(self, value, is_path=False, is_shell_path=False):
+    def escape_string(self, value, is_path=False):
         """Escape the <, >, ^, and & special characters reserved by Windows.
-
-        ``is_path`` and ``is_shell_path`` are mutually exclusive.
 
         Args:
             value (str/EscapedString): String or already escaped string.
@@ -229,7 +228,6 @@ class CMD(Shell):
         Returns:
             value (str): The value escaped for Windows.
             is_path (bool): True if the value is path-like.
-            is_shell_path (bool): True if the value is a shell-path.
 
         """
         value = EscapedString.promote(value)
@@ -244,8 +242,6 @@ class CMD(Shell):
             else:
                 if is_path:
                     txt = self.normalize_paths(txt)
-                elif is_shell_path:
-                    txt = self.as_shell_path(txt)
 
                 txt = self._escaper(txt)
             result += txt
@@ -262,27 +258,12 @@ class CMD(Shell):
             (str): Transformed file path.
         """
         # Prevent path conversion if normalization is disabled in the config.
-        if config.disable_normalization:
+        if not config.enable_path_normalization:
             return path
 
-        return self.normalize_path(path)
+        path = self.normalize_path(path)
 
-    def as_shell_path(self, path):
-        """
-        Return the given path as a shell path.
-        Used if the shell requires a different pathing structure.
-
-        Args:
-            path (str): File path.
-
-        Returns:
-            (str): Transformed file path.
-        """
-        # Prevent path conversion if normalization is disabled in the config.
-        if config.disable_normalization:
-            return path
-
-        return self.normalize_path(path)
+        return path
 
     def normalize_path(self, path):
         """
@@ -297,12 +278,16 @@ class CMD(Shell):
             (str): Normalized file path.
         """
         # Prevent path conversion if normalization is disabled in the config.
-        if config.disable_normalization:
+        if not config.enable_path_normalization:
             return path
 
         converted_path = convert_path(path, 'windows')
 
         if path != converted_path:
+            print_debug("CMD normalize_path()")
+            print_debug(
+                "path normalized: {!r} -> {}".format(path, converted_path)
+            )
             self._addline("REM normalized path: {!r} -> {}".format(path, converted_path))
 
         return converted_path
@@ -317,7 +302,6 @@ class CMD(Shell):
         new_value = self.escape_string(
             value,
             is_path=self._is_pathed_key(key),
-            is_shell_path=self._is_shell_pathed_key(key),
         )
 
         self._addline('set %s=%s' % (key, new_value))

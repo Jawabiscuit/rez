@@ -330,19 +330,6 @@ class Shell(ActionInterpreter):
         """
         return path
 
-    def as_shell_path(self, path):
-        """
-        Return the given path as a shell path.
-        Used if the shell requires a different pathing structure.
-
-        Args:
-            path (str): File path.
-
-        Returns:
-            (str): Transformed file path.
-        """
-        return path
-
     def normalize_path(self, path):
         """
         Normalize the path to fit the environment.

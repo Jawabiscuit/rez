@@ -227,7 +227,7 @@ class PowerShellBase(Shell):
             script = '&& '.join(lines)
         return script
 
-    def escape_string(self, value, is_path=False, is_shell_path=False):
+    def escape_string(self, value, is_path=False):
         value = EscapedString.promote(value)
         value = value.expanduser()
         result = ''
@@ -238,8 +238,6 @@ class PowerShellBase(Shell):
             else:
                 if is_path:
                     txt = self.normalize_paths(txt)
-                elif is_shell_path:
-                    txt = self.as_shell_path(txt)
 
                 txt = self._escape_quotes(txt)
             result += txt
@@ -247,13 +245,14 @@ class PowerShellBase(Shell):
 
     def normalize_path(self, path):
         # Prevent path conversion if normalization is disabled in the config.
-        if config.disable_normalization:
+        if not config.enable_path_normalization:
             return path
 
         # TODO: Is this necessary?
         if platform_.name == "windows":
             converted_path = convert_path(path, 'windows')
             if path != converted_path:
+                print_debug("PowerShellBase normalize_path()")
                 print_debug("Path normalized: {} -> {}".format(path, converted_path))
                 self._addline("# Path normalized: {} -> {}".format(path, converted_path))
             return converted_path
@@ -268,28 +267,21 @@ class PowerShellBase(Shell):
         pass
 
     def setenv(self, key, value):
-        is_path = self._is_pathed_key(key)
-        new_value = self.escape_string(value, is_path=is_path)
-
-        self._addline(
-            'Set-Item -Path "Env:{0}" -Value "{1}"'.format(key, new_value)
-        )
+        value = self.escape_string(value, is_path=self._is_pathed_key(key))
+        self._addline('Set-Item -Path "Env:{0}" -Value "{1}"'.format(key, value))
 
     def prependenv(self, key, value):
-        is_path = self._is_pathed_key(key)
-        new_value = self.escape_string(value, is_path=is_path)
+        value = self.escape_string(value, is_path=self._is_pathed_key(key))
 
         # Be careful about ambiguous case in pwsh on Linux where pathsep is :
         # so that the ${ENV:VAR} form has to be used to not collide.
         self._addline(
             'Set-Item -Path "Env:{0}" -Value ("{1}{2}" + (Get-ChildItem "Env:{0}").Value)'.format(
-                key, new_value, self.pathsep)
+                key, value, self.pathsep)
         )
 
     def appendenv(self, key, value):
-        is_path = self._is_pathed_key(key)
-        # Doesn't just escape, but can also perform path normalization
-        modified_value = self.escape_string(value, is_path=is_path)
+        value = self.escape_string(value, is_path=self._is_pathed_key(key))
 
         # Be careful about ambiguous case in pwsh on Linux where pathsep is :
         # so that the ${ENV:VAR} form has to be used to not collide.
@@ -297,7 +289,7 @@ class PowerShellBase(Shell):
         # an exception of the Environment Variable is not set already
         self._addline(
             'Set-Item -Path "Env:{0}" -Value ((Get-ChildItem -ErrorAction SilentlyContinue "Env:{0}").Value + "{1}{2}")'
-            .format(key, os.path.pathsep, modified_value))
+            .format(key, os.path.pathsep, value))
 
     def unsetenv(self, key):
         self._addline(r"Remove-Item Env:\%s" % key)

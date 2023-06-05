@@ -110,7 +110,6 @@ class SH(UnixShell):
         modified_value = self.escape_string(
             value,
             is_path=self._is_pathed_key(key),
-            is_shell_path=self._is_shell_pathed_key(key),
             is_implicit=is_implicit,
         )
 
@@ -129,7 +128,7 @@ class SH(UnixShell):
         self._addline('. %s' % value)
 
     def escape_string(
-        self, value, is_path=False, is_shell_path=False, is_implicit=False
+        self, value, is_path=False, is_implicit=False
     ):
         value = EscapedString.promote(value)
         if not is_implicit:
@@ -143,10 +142,7 @@ class SH(UnixShell):
                 if not txt.startswith("'"):
                     txt = "'%s'" % txt
             else:
-                if is_shell_path:
-                    txt = self.as_shell_path(txt)
-                elif is_path:
-                    # potentially calls plugin shell's normalize
+                if is_path:
                     txt = self.normalize_paths(txt)
 
                 txt = txt.replace('\\', '\\\\')
