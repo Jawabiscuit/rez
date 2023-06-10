@@ -6,12 +6,12 @@ on:
       - '.github/workflows/mac.yaml'
       - '!src/rez/utils/_version.py'
       - '!**.md'
-  push:
-    paths:
-      - 'src/**'
-      - '.github/workflows/mac.yaml'
-      - '!src/rez/utils/_version.py'
-      - '!**.md'
+  # push:
+  #   paths:
+  #     - 'src/**'
+  #     - '.github/workflows/mac.yaml'
+  #     - '!src/rez/utils/_version.py'
+  #     - '!**.md'
   workflow_dispatch:
 
 concurrency:

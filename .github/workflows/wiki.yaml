@@ -2,11 +2,11 @@ name: wiki
 on:
   release:
     types: [released]
-  push:
-    paths:
-      - '.github/workflows/wiki.yaml'
-      - 'wiki/**'
-      - src/rez/rezconfig.py
+  # push:
+  #   paths:
+  #     - '.github/workflows/wiki.yaml'
+  #     - 'wiki/**'
+  #     - src/rez/rezconfig.py
 
 jobs:
   build:

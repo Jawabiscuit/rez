@@ -9,15 +9,15 @@ on:
       - '!src/rez/data/**'
       - '!src/rez/vendor/**'
       - '!src/rez/backport/**'
-  push:
-    paths:
-      - 'src/rez/**.py'
-      - 'src/rezplugins/**.py'
-      - '.github/workflows/flake8.yaml'
-      - '!src/rez/utils/_version.py'
-      - '!src/rez/data/**'
-      - '!src/rez/vendor/**'
-      - '!src/rez/backport/**'
+  # push:
+  #   paths:
+  #     - 'src/rez/**.py'
+  #     - 'src/rezplugins/**.py'
+  #     - '.github/workflows/flake8.yaml'
+  #     - '!src/rez/utils/_version.py'
+  #     - '!src/rez/data/**'
+  #     - '!src/rez/vendor/**'
+  #     - '!src/rez/backport/**'
 
 jobs:
   lint:
