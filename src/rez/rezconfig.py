@@ -525,6 +525,12 @@ env_var_separators = {
     "DOXYGEN_TAGFILES": " ",
 }
 
+shell_env_var_separators = {
+    "gitbash": {
+        "PYTHONPATH": ";",
+    }
+}
+
 # This setting identifies path-like environment variables. This is required
 # because some shells need to apply path normalization. For example, the command
 # `env.PATH.append("{root}/bin")` will be normalized to (eg) `C:\...\bin` in a

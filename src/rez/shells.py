@@ -136,6 +136,42 @@ class Shell(ActionInterpreter):
     def __init__(self):
         self._lines = []
         self.settings = config.plugins.shell[self.name()]
+        self._env_sep_map = self._get_env_sep_map()
+
+    def _get_env_sep_map(self):
+        """
+        Get a dict of environment variable names to path separators.
+        """
+        if getattr(self, "_env_sep_map", None):
+            return self._env_sep_map
+
+        shell = self.name()
+        config_name = "env_var_separators"
+        shell_config_name = "shell_env_var_separators"
+        env_seps = config.get(config_name, {})
+        shell_configs = config.get(shell_config_name, {})
+        shell_env_seps = shell_configs.get(shell, {})
+
+        if env_seps and shell_env_seps:
+            for var, pathsep in env_seps.items():
+                shell_pathsep = shell_env_seps.get(var, "")
+                if shell_pathsep and shell_pathsep != pathsep:
+                    print_debug(
+                        "'%s' is configured in '%s' and configured in "
+                        "'%s'. In this case, the shell config value '%s' will "
+                        "trump the config value '%s'",
+                        var,
+                        config_name,
+                        shell_config_name,
+                        shell_pathsep,
+                        pathsep,
+                    )
+                    env_seps[var] = shell_pathsep
+
+        return env_seps
+
+    def _env_sep(self, name):
+        return self._env_sep_map.get(name, self.pathsep)
 
     def _addline(self, line):
         self._lines.append(line)
