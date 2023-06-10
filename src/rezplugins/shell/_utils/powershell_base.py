@@ -9,12 +9,11 @@ from subprocess import PIPE
 from rez.config import config
 from rez.vendor.six import six
 from rez.rex import RexExecutor, OutputStyle, EscapedString
-from rez.shells import Shell
+from rez.shells import Shell, log
 from rez.system import system
 from rez.utils.cygpath import convert_path
 from rez.utils.platform_ import platform_
 from rez.utils.execution import Popen
-from rez.utils.logging_ import print_debug
 from rez.util import shlex_join
 
 
@@ -252,8 +251,8 @@ class PowerShellBase(Shell):
         if platform_.name == "windows":
             converted_path = convert_path(path, 'windows')
             if path != converted_path:
-                print_debug("PowerShellBase normalize_path()")
-                print_debug("Path normalized: {} -> {}".format(path, converted_path))
+                log("PowerShellBase normalize_path()")
+                log("Path normalized: {} -> {}".format(path, converted_path))
                 self._addline("# Path normalized: {} -> {}".format(path, converted_path))
             return converted_path
 

@@ -9,11 +9,12 @@ import os.path
 import subprocess
 
 from rez.config import config
+from rez.shells import log
 from rezplugins.shell.bash import Bash
 from rez.utils.cygpath import convert_path
 from rez.utils.execution import Popen
 from rez.utils.platform_ import platform_
-from rez.utils.logging_ import print_debug, print_warning
+from rez.utils.logging_ import print_warning
 from rez.util import dedup
 from ._utils.windows import get_syspaths_from_registry
 
@@ -130,13 +131,11 @@ class GitBash(Bash):
         if not config.enable_path_normalization:
             return path
 
-        print_debug("GitBash normalize_path()")
+        log("GitBash normalize_path()")
         normalized_path = convert_path(path, mode=mode, force_fwdslash=True)
 
         if path != normalized_path:
-            print_debug(
-                "path normalized: {!r} -> {}".format(path, normalized_path)
-            )
+            log("path normalized: {!r} -> {}".format(path, normalized_path))
             self._addline(
                 "# path normalized: {!r} -> {}".format(path, normalized_path)
             )
@@ -166,10 +165,8 @@ class GitBash(Bash):
         normalized_path = self._drive_regex.sub(lowrepl, path).replace("\\", "/")
 
         if path != normalized_path:
-            print_debug("GitBash normalize_path[s]()")
-            print_debug(
-                "path normalized: {!r} -> {}".format(path, normalized_path)
-            )
+            log("GitBash normalize_path[s]()")
+            log("path normalized: {!r} -> {}".format(path, normalized_path))
             self._addline(
                 "# path normalized: {!r} -> {}".format(path, normalized_path)
             )

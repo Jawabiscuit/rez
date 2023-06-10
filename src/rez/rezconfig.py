@@ -705,6 +705,9 @@ warn_all = False
 # Turn off all warnings. This overrides warn_all.
 warn_none = False
 
+# Print debugging info for shells
+debug_shells = False
+
 # Print info whenever a file is loaded from disk, or saved to disk.
 debug_file_loads = False
 

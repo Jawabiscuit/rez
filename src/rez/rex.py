@@ -604,7 +604,6 @@ class ActionInterpreter(object):
         Returns:
             str: The normalized path.
         """
-        print_debug("ActionInterpreter normalize_path()")
         return path
 
     def normalize_paths(self, value):
@@ -615,7 +614,6 @@ class ActionInterpreter(object):
         # Prevent path conversion if normalization is disabled in the config.
         if not config.enable_path_normalization:
             return value
-        print_debug("ActionInterpreter normalize_path[s]()")
         paths = value.split(self.pathsep)
         paths = [self.normalize_path(x) for x in paths]
         return self.pathsep.join(paths)

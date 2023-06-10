@@ -7,11 +7,10 @@ Windows Command Prompt (DOS) shell.
 """
 from rez.config import config
 from rez.rex import RexExecutor, expandable, OutputStyle, EscapedString
-from rez.shells import Shell
+from rez.shells import Shell, log
 from rez.system import system
 from rez.utils.cygpath import convert_path
 from rez.utils.execution import Popen
-from rez.utils.logging_ import print_debug
 from rez.utils.platform_ import platform_
 from rez.vendor.six import six
 from ._utils.windows import get_syspaths_from_registry
@@ -284,11 +283,11 @@ class CMD(Shell):
         converted_path = convert_path(path, 'windows')
 
         if path != converted_path:
-            print_debug("CMD normalize_path()")
-            print_debug(
-                "path normalized: {!r} -> {}".format(path, converted_path)
+            log("CMD normalize_path()")
+            log("path normalized: {!r} -> {}".format(path, converted_path))
+            self._addline(
+                "REM normalized path: {!r} -> {}".format(path, converted_path)
             )
-            self._addline("REM normalized path: {!r} -> {}".format(path, converted_path))
 
         return converted_path
 
