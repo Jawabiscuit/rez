@@ -246,24 +246,6 @@ class CMD(Shell):
             result += txt
         return result
 
-    def as_path(self, path):
-        """
-        Return the given path as a system path.
-        Used if the path needs to be reformatted to suit a specific case.
-        Args:
-            path (str): File path.
-
-        Returns:
-            (str): Transformed file path.
-        """
-        # Prevent path conversion if normalization is disabled in the config.
-        if not config.enable_path_normalization:
-            return path
-
-        path = self.normalize_path(path)
-
-        return path
-
     def normalize_path(self, path):
         """
         Normalize the path to fit the environment.

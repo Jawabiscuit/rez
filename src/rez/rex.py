@@ -19,7 +19,6 @@ from rez.exceptions import RexError, RexUndefinedVariableError, \
 from rez.util import shlex_join, is_non_string_iterable
 from rez.utils import reraise
 from rez.utils.execution import Popen
-from rez.utils.logging_ import print_debug
 from rez.utils.sourcecode import SourceCode, SourceCodeError
 from rez.utils.data_utils import AttrDictWrapper
 from rez.utils.formatting import expandvars
@@ -818,18 +817,6 @@ class Python(ActionInterpreter):
 
         env['SYSTEMROOT'] = os.environ['SYSTEMROOT']
 
-    def as_path(self, path):
-        """
-        Return the given path as a system path.
-        Used if the path needs to be reformatted to suit a specific case.
-        Args:
-            path (str): File path.
-
-        Returns:
-            (str): Transformed file path.
-        """
-        return path
-
     def normalize_path(self, path):
         """
         Normalize the path to fit the environment.
@@ -1402,7 +1389,7 @@ class RexExecutor(object):
         Returns:
             str: The normalized path.
         """
-        return self.interpreter.as_path(path)
+        return self.interpreter.normalize_path(path)
 
     @classmethod
     def compile_code(cls, code, filename=None, exec_namespace=None):

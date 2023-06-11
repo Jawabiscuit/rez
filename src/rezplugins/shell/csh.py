@@ -110,7 +110,7 @@ class CSH(UnixShell):
                     txt = "'%s'" % txt
             else:
                 if is_path:
-                    txt = self.as_path(txt)
+                    txt = self.normalize_path(txt)
 
                 txt = txt.replace('"', '"\\""')
                 txt = txt.replace('!', '\\!')
