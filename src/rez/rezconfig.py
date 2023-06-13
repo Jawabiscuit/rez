@@ -526,12 +526,13 @@ env_var_separators = {
 }
 
 # This setting identifies path-like environment variables. This is required
-# because some shells need to apply path normalization. For example, the command
+# because some path vars need platform normalization. For example, the command
 # `env.PATH.append("{root}/bin")` will be normalized to (eg) `C:\...\bin` in a
-# `cmd` shell on Windows. Note that wildcards are supported. If this setting is
-# not correctly configured, then your shell may not work correctly.
+# `cmd` shell on Windows. Note that wildcards are supported, `[*PATH]` for
+# example. If this setting is not correctly configured, then your shell may not
+# work correctly.
 pathed_env_vars = [
-    "*PATH"
+    "PATH"
 ]
 
 shell_env_var_separators = {
