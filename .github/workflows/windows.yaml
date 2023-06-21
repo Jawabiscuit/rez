@@ -100,7 +100,7 @@ jobs:
         os-version:
           - '2019'
         py-version:
-          - '2.7.17'
+          # - '2.7.17'
           - '3.7.5'
 
     outputs:
@@ -255,7 +255,7 @@ jobs:
         os-version:
           - '2019'
         py-version:
-          - '2.7.17'
+          # - '2.7.17'
           - '3.7.5'
 
     steps:
@@ -331,7 +331,7 @@ jobs:
         os-version:
           - '2019'
         py-version:
-          - '2.7.17'
+          # - '2.7.17'
           - '3.7.5'
 
     steps:
