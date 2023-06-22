@@ -709,7 +709,8 @@ context_tracking_extra_fields = {}
 # If true, print warnings associated with shell startup sequence, when using
 # tools such as rez-env. For example, if the target shell type is "sh", and
 # the "rcfile" param is used, you would get a warning, because the sh shell
-# does not support rcfile.
+# does not support rcfile. Also recieve warnings or errors if incompatible shell
+# settings are used.
 warn_shell_startup = False
 
 # If true, print a warning when an untimestamped package is found.
