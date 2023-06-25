@@ -532,7 +532,7 @@ env_var_separators = {
 # example. If this setting is not correctly configured, then your shell may not
 # work correctly.
 pathed_env_vars = [
-    "PATH"
+    "*PATH"
 ]
 
 shell_env_var_separators = {
