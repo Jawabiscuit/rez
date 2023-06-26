@@ -518,7 +518,7 @@ new_session_popen_args = None
 
 # This setting can be used to override the separator used for environment
 # variables that represent a list of items. By default, the value of os.pathsep
-# will be used, unless the environment variable is list here, in which case the
+# will be used, unless the environment variable is listed here, in which case the
 # configured separator will be used.
 env_var_separators = {
     "CMAKE_MODULE_PATH": ";",
@@ -528,11 +528,11 @@ env_var_separators = {
 # This setting identifies path-like environment variables. This is required
 # because some path vars need platform normalization. For example, a setting
 # such as `["PATH"]` with the command `env.PATH.append("{root}/bin")` will cause
-# `{root}` to be normalized to (eg) `C:\...\bin` in a `cmd` shell on Windows.
+# `{root}` to be normalized to (eg) `C:\...\bin` in a cmd shell on Windows.
 #
 # Note that wildcards are supported, `[*PATH]` for example. Like the previous
 # example, a setting like this means `env.PYTHONPATH.append("{root}/python")`
-# would similarly normalize to `C:\...\python` in a `cmd` shell on Windows.
+# would similarly normalize to `C:\...\python` in a cmd shell on Windows.
 #
 # Conversely to path-like variables, it should be obvious that this setting is
 # not applied to variables that are not path-like. For example, if you set
@@ -572,8 +572,8 @@ shell_pathed_env_vars = {
 
 # Global toggle to perform path normalization to path-like environment variables.
 # Applies the `pathed_env_vars` and `shell_pathed_env_vars` setting to all shells.
-# If `shell_pathed_env_vars` setting is configured then it overrides `pathed_env_vars`.
-# Setting this to `False` disables all normalization.
+# If `shell_pathed_env_vars` setting is configured then it overrides `pathed_env_vars`
+# if the keys are the same. Setting this to `False` disables all normalization.
 enable_path_normalization = False
 
 # Defines what suites on $PATH stay visible when a new rez environment is resolved.
