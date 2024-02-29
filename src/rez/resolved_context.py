@@ -2,8 +2,6 @@
 # Copyright Contributors to the Rez Project
 
 
-from __future__ import print_function
-
 from rez import __version__, module_root_path
 from rez.package_repository import package_repository_manager
 from rez.solver import SolverCallbackReturn
@@ -35,18 +33,16 @@ from rez.exceptions import ResolvedContextError, PackageCommandError, \
 from rez.utils.graph_utils import write_dot, write_compacted, \
     read_graph_from_string
 from rez.utils.resolve_graph import failure_detail_from_graph
-from rez.vendor.six import six
 from rez.version import VersionRange
 from rez.version import Requirement
-from rez.vendor.enum import Enum
 from rez.vendor import yaml
 from rez.utils import json
 from rez.utils.yaml import dump_yaml
 from rez.utils.platform_ import platform_
-import rez.deprecations
 
 from contextlib import contextmanager
 from functools import wraps
+from enum import Enum
 import getpass
 import socket
 import threading
@@ -54,9 +50,6 @@ import time
 import sys
 import os
 import os.path
-
-
-basestring = six.string_types[0]
 
 
 class RezToolsVisibility(Enum):
@@ -225,7 +218,7 @@ class ResolvedContext(object):
 
         self._package_requests = []
         for req in package_requests:
-            if isinstance(req, basestring):
+            if isinstance(req, str):
                 req = PackageRequest(req)
             self._package_requests.append(req)
 
@@ -587,7 +580,7 @@ class ResolvedContext(object):
             request_ = []
 
             for req in package_requests:
-                if isinstance(req, basestring):
+                if isinstance(req, str):
                     req = PackageRequest(req)
 
                 if req.name in request_dict:
@@ -659,17 +652,7 @@ class ResolvedContext(object):
         """Save the context to a buffer."""
         doc = self.to_dict()
 
-        if config.rxt_as_yaml:
-            rez.deprecations.warn(
-                "Writing the RXT file using the YAML format is deprecated. "
-                "Both this functionality and the rxt_as_yaml setting will "
-                "be removed in rez 3.0.0",
-                rez.deprecations.RezDeprecationWarning,
-            )
-            content = dump_yaml(doc)
-        else:
-            content = json.dumps(doc, indent=4, separators=(",", ": "),
-                                 sort_keys=True)
+        content = json.dumps(doc, indent=4, separators=(",", ": "), sort_keys=True)
 
         buf.write(content)
 
@@ -1464,8 +1447,7 @@ class ResolvedContext(object):
 
         # write out the native context file
         context_code = executor.get_output()
-        encoding = {"encoding": "utf-8"} if six.PY3 else {}
-        with open(context_file, 'w', **encoding) as f:
+        with open(context_file, 'w', encoding="utf-8") as f:
             f.write(context_code)
 
         quiet = quiet or \
@@ -1884,7 +1866,7 @@ class ResolvedContext(object):
         # remove fields with unexpanded env-vars, or empty string
         def _del(value):
             return (
-                isinstance(value, basestring)
+                isinstance(value, str)
                 and (not value or ENV_VAR_REGEX.search(value))
             )
 
